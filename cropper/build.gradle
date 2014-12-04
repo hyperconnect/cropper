@@ -1,6 +1,5 @@
 apply plugin: 'android-library'
-apply plugin: 'maven'
-apply plugin: 'signing'
+apply plugin: 'android-maven'
 
 version = "1.0.1-AZAR"
 group = "com.edmodo"
@@ -32,15 +31,11 @@ repositories {
     mavenCentral()
 }
 
-signing {
-    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
-    sign configurations.archives
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from 'src'
 }
 
-task publishLocal(type: Upload) {
-    configuration = configurations.archives
-    repositories.mavenDeployer {
-        repository(url: "file://$buildDir/repo")
-    }
+artifacts {
+    archives sourcesJar
 }
-
